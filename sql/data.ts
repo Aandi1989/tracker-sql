@@ -17,3 +17,20 @@ export async function fetchIssues() {
         throw new Error('Failed to fetch revenue data.');
     }
 }
+
+export async function fetchIssueById(id: string) {
+    noStore();
+    try {
+        const data = await executeQuery(sql`
+            SELECT *
+            FROM issue
+            WHERE id = ${id}
+    `);
+        // @ts-ignore   /* тк из базы данных мы получаем массив с одним объектом */
+        return data[0] || null;
+     
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch revenue data.');
+    }
+}
