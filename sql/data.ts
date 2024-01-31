@@ -73,3 +73,17 @@ export async function updateIssue(id: string, title: string, description: string
         throw new Error('Failed to update issue data.');
     }
 }
+
+export async function deleteIssue(id: string){
+    try {
+        const data = await executeQuery(sql`
+            DELETE FROM issue
+            WHERE id = ${id}
+        `);
+        return data
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to delete issue.');
+    }
+}
+
