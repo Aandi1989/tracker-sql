@@ -1,15 +1,13 @@
-import { fetchIssues } from "@/sql/data";
-import { Table, TableBody } from "@radix-ui/themes";
-import { IssueStatusBadge, Link} from '@/app/components';
-import IssueActions from "./IssueActions";
+import { Skeleton } from '@/app/components';
+import { Table, TableBody } from '@radix-ui/themes';
+import IssueActions from '../_components/IssueActions';
 
-const IssuesPage = async () => {
-  const issues = await fetchIssues();
-
+const LoadingIssuesPage = () => {
+  const issues = [1, 2, 3, 4, 5];
   return (
     <div>
-      <IssueActions />
-      <Table.Root variant="surface">
+        <IssueActions />
+        <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
@@ -24,27 +22,26 @@ const IssuesPage = async () => {
         <TableBody>
           {/* @ts-ignore */}
           {issues.map((issue) => (
-            <Table.Row key={issue.id}>
+            <Table.Row key={issue}>
               <Table.Cell>
-                <Link href={`/issues/${issue.id}`}>
-                  {issue.title}
-                </Link>
+                <Skeleton />
                 <div className="block md:hidden">
-                  <IssueStatusBadge status={issue.status} />
+                <Skeleton />
                 </div>
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                <IssueStatusBadge status={issue.status} />
+              <Skeleton />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {issue.createdAt.toDateString()}
+              <Skeleton />
               </Table.Cell>
             </Table.Row>
           ))}
         </TableBody>
       </Table.Root>
     </div>
-  );
-};
+    
+  )
+}
 
-export default IssuesPage;
+export default LoadingIssuesPage

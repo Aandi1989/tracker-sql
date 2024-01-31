@@ -1,6 +1,6 @@
 import { issueSchema } from "@/app/validationSchemas";
-import { NextRequest, NextResponse } from "next/server";
 import { deleteIssue, fetchIssueById, updateIssue } from "@/sql/data";
+import { NextRequest, NextResponse } from "next/server";
 
 
 export async function PATCH(
