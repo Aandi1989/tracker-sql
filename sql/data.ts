@@ -7,7 +7,6 @@ import { unstable_noStore as noStore } from 'next/cache';
 export async function fetchIssues() {
     // Add noStore() here prevent the response from being cached.
     // This is equivalent to in fetch(..., {cache: 'no-store'}).
-    console.log('fetchIssues was called')
     noStore();
     try {
         const data = await executeQuery(sql`
@@ -17,7 +16,7 @@ export async function fetchIssues() {
         return data
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch revenue data.');
+        throw new Error('Failed to fetch issue data.');
     }
 }
 
@@ -34,6 +33,21 @@ export async function fetchIssueById(id: string) {
      
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch revenue data.');
+        throw new Error('Failed to fetch issue data.');
+    }
+}
+
+export async function updateIssue(id: string, title: string, description: string){
+    noStore();
+    try {
+        const data = await executeQuery(sql`
+            UPDATE issue
+            SET title = ${title}, description = ${description}, updateAt =  CURRENT_TIMESTAMP(3)
+            WHERE id = ${id}
+        `);
+        return data
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to update issue data.');
     }
 }
