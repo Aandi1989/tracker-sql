@@ -36,11 +36,13 @@ const IssueForm = ({ issue }: { issue?: Issue}) => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
-      await axios.post("/api/issues", data);
-      // router.refresh() пробуем используем вместо revalidatePath чтобы чистить client cache и выполнить новый серверный запрос
-      // в проекте dashboard связка revalidatePath('/dashboard/invoices') и redirect('/dashboard/invoices') используется в "use server"
-      router.refresh();
+      if(issue){
+        await axios.patch('/api/issues/' + issue.id, data)
+      }else{
+        await axios.post("/api/issues", data);
+      }
       router.push("/issues");
+      router.refresh();
     } catch (error) {
       setSubmitting(false);
       setError("An unexpected error occurred.");
@@ -69,7 +71,8 @@ const IssueForm = ({ issue }: { issue?: Issue}) => {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Button disabled={isSubmitting}>
-          Submit New Issue {isSubmitting && <Spinner />}
+          { issue ? 'Update Issue' : 'Submit New Issue' }{' '}
+          {isSubmitting && <Spinner />}
         </Button>
       </form>
     </div>
