@@ -87,3 +87,20 @@ export async function deleteIssue(id: string){
     }
 }
 
+export async function getUser(email: string){
+    try {
+        const data = await executeQuery(sql`
+            SELECT *
+            FROM user
+            WHERE email = ${email}
+        `);
+        // @ts-ignore 
+        console.log(data[0])
+        // @ts-ignore   /* тк из базы данных мы получаем массив с одним объектом */
+        return data[0] || null;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to get user.');
+    }
+}
+

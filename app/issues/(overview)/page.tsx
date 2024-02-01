@@ -2,12 +2,10 @@ import { fetchIssues } from "@/sql/data";
 import { Table, TableBody } from "@radix-ui/themes";
 import { IssueStatusBadge, Link} from '@/app/components';
 import IssueActions from "../_components/IssueActions";
-import delay from "delay";
+
 
 const IssuesPage = async () => {
   const issues = await fetchIssues();
-
-  // await delay(2000);
 
   return (
     <div>
