@@ -116,7 +116,6 @@ export async function createUser(email: string, password: string){
                 ${password} 
                 )
         `);
-        console.log(data)
         return data;
     } catch (error) {
         console.error('Database Error:', error);
