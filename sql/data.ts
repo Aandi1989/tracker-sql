@@ -52,7 +52,6 @@ export async function fetchIssueById(id: string) {
     `);
         // @ts-ignore   /* тк из базы данных мы получаем массив с одним объектом */
         return data[0] || null;
-     
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch issue data.');
@@ -94,8 +93,6 @@ export async function getUser(email: string){
             FROM user
             WHERE email = ${email}
         `);
-        // @ts-ignore 
-        console.log(data[0])
         // @ts-ignore   /* тк из базы данных мы получаем массив с одним объектом */
         return data[0] || null;
     } catch (error) {
@@ -120,6 +117,20 @@ export async function createUser(email: string, password: string){
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to create user.');
+    }
+}
+
+export async function getUsers(){
+    try {
+        const data = await executeQuery(sql`
+            SELECT *
+            FROM user
+            ORDER BY name ASC
+        `);
+        return data;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to get users.');
     }
 }
 

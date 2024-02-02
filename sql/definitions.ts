@@ -9,3 +9,12 @@ export type Issue = {
     updatedAt: Date;
 };
 
+export type User = {
+    id:number,
+    name?: string,
+    email: string,
+    emailVerified?: string,
+    image?: string ,
+    hashedPassword: string
+}
+
