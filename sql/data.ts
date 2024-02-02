@@ -104,3 +104,23 @@ export async function getUser(email: string){
     }
 }
 
+export async function createUser(email: string, password: string){
+    try {
+        const data = await executeQuery(sql`
+            INSERT INTO user (
+                email, 
+                hashedPassword
+                )
+            VALUES (
+                ${email}, 
+                ${password} 
+                )
+        `);
+        console.log(data)
+        return data;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to create user.');
+    }
+}
+
