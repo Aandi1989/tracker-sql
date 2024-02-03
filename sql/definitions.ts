@@ -7,6 +7,7 @@ export type Issue = {
     status: Status;
     createdAt: Date;
     updatedAt: Date;
+    assigninedToUserId: string;
 };
 
 export type User = {

@@ -31,9 +31,11 @@ const IssueForm = ({ issue }: { issue?: Issue}) => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      console.log({...data,assigninedToUserId: issue?.assigninedToUserId})
       setSubmitting(true);
       if(issue){
-        await axios.patch('/api/issues/' + issue.id, data)
+        // we have to add assigninedToUserId otherwise it wiil be erased to null
+        await axios.patch('/api/issues/' + issue.id, {...data, assigninedToUserId: String(issue?.assigninedToUserId)})
       }else{
         await axios.post("/api/issues", data);
       }
