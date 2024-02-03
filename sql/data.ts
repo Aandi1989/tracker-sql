@@ -3,6 +3,7 @@
 import sql from 'sql-template-strings';
 import { executeQuery } from '../sql/db';
 import { unstable_noStore as noStore } from 'next/cache';
+import { Status } from './definitions';
 
 export async function createIssue(title: string, description: string){
     noStore();
@@ -26,17 +27,19 @@ export async function createIssue(title: string, description: string){
       }
 }
 
-export async function fetchIssues() {
+export async function fetchIssues(status?: Status) {
     // Add noStore() here prevent the response from being cached.
     // This is equivalent to in fetch(..., {cache: 'no-store'}).
     noStore();
     try {
-        const data = await executeQuery(sql`
-            SELECT *
-            FROM issue
-    `)
-        return data
+        const query = status
+        ? sql`SELECT * FROM issue WHERE status = ${status}`
+        : sql`SELECT * FROM issue`;
+
+    const data = await executeQuery(query);
+    return data;
     } catch (error) {
+        console.log('error is here')
         console.error('Database Error:', error);
         throw new Error('Failed to fetch issue data.');
     }

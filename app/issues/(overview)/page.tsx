@@ -2,10 +2,22 @@ import { fetchIssues } from "@/sql/data";
 import { Table, TableBody } from "@radix-ui/themes";
 import { IssueStatusBadge, Link} from '@/app/components';
 import IssueActions from "../_components/IssueActions";
+import { Status } from "@/sql/definitions";
+import { Underdog } from "next/font/google";
 
 
-const IssuesPage = async () => {
-  const issues = await fetchIssues();
+const IssuesPage = async ({ 
+    searchParams 
+  }: { 
+    searchParams: { status: Status};
+  }) => {
+   
+    const statuses = ["OPEN", "IN_PROGRESS", "CLOSED"]
+   const status = statuses.includes(searchParams.status)
+    ? searchParams.status
+    : undefined;
+   
+  const issues = await fetchIssues(status);
 
   return (
     <div>
