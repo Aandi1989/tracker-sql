@@ -58,12 +58,16 @@ export async function fetchIssueById(id: string) {
     }
 }
 
-export async function updateIssue(id: string, title: string, description: string){
+export async function updateIssue(id: string, title: string, description: string, assigninedToUserId?: string){
     noStore();
     try {
         const data = await executeQuery(sql`
             UPDATE issue
-            SET title = ${title}, description = ${description}, updateAt =  CURRENT_TIMESTAMP(3)
+            SET 
+                title = ${title}, 
+                description = ${description}, 
+                updateAt =  CURRENT_TIMESTAMP(3), 
+                assigninedToUserId = ${assigninedToUserId}
             WHERE id = ${id}
         `);
         return data
@@ -131,6 +135,21 @@ export async function getUsers(){
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to get users.');
+    }
+}
+
+export async function getUserById(id: string){
+    try {
+        const data = await executeQuery(sql`
+            SELECT *
+            FROM user
+            WHERE id = ${id}
+        `);
+        // @ts-ignore   /* тк из базы данных мы получаем массив с одним объектом */
+        return data[0] || null;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to get user.');
     }
 }
 
