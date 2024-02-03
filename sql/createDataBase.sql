@@ -78,3 +78,9 @@ ALTER TABLE `Session` ADD CONSTRAINT `Session_userId_fkey` FOREIGN KEY (`userId`
 
 -- AlterTable
 ALTER TABLE `user` ADD COLUMN `hashedPassword` VARCHAR(191) NULL;
+
+-- AlterTable
+ALTER TABLE `issue` ADD COLUMN `assigninedToUserId` INTEGER NULL;
+
+-- AddForeignKey
+ALTER TABLE `issue` ADD CONSTRAINT `Issue_userId_fkey` FOREIGN KEY (`assigninedToUserId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
