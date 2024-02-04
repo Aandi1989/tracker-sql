@@ -28,6 +28,8 @@ const IssuesPage = async ({
    const status = statuses.includes(searchParams.status)
     ? searchParams.status
     : undefined;
+
+  
    
   const issues = await fetchIssues(status, searchParams.orderBy);
 

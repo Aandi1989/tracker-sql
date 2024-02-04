@@ -27,19 +27,12 @@ export async function createIssue(title: string, description: string){
       }
 }
 
-/*try {
-        const query = status
-        ? sql`SELECT * FROM issue WHERE status = ${status}`
-        : sql`SELECT * FROM issue`;
+// these strings dont work 
+// const data = await executeQuery(sql`SELECT * FROM issue ORDER BY ${orderBy}`)
+// const data = await executeQuery(sql`SELECT * FROM issue WHERE status = ${status} ORDER BY title`)
 
-    const data = await executeQuery(query);
-    return data;
-*/ 
 
 export async function fetchIssues(status?: Status, orderBy?: keyof Issue) {
-    // Add noStore() here prevent the response from being cached.
-    // This is equivalent to in fetch(..., {cache: 'no-store'}).
-    noStore();
     try {
        if(!status && !orderBy){
         const data = await executeQuery(sql`SELECT * FROM issue`)
@@ -50,14 +43,35 @@ export async function fetchIssues(status?: Status, orderBy?: keyof Issue) {
                 const data = await executeQuery(sql`SELECT * FROM issue WHERE status = ${status}`)
                 return data;
             }else{
-                console.log(orderBy)
-                const data = await executeQuery(sql`SELECT * FROM issue ORDER BY ${orderBy}`)
-                console.log(data)
-                return data;
+                // doesn't work
+                // const data = await executeQuery(sql`SELECT * FROM issue ORDER BY ${orderBy}`)
+                if(orderBy === 'title'){
+                    const data = await executeQuery(sql`SELECT * FROM issue ORDER BY title`)
+                    return data;
+                }
+                if(orderBy === 'status'){
+                    const data = await executeQuery(sql`SELECT * FROM issue ORDER BY status`)
+                    return data;
+                }
+                if(orderBy === 'createdAt'){
+                    const data = await executeQuery(sql`SELECT * FROM issue ORDER BY createdAt`)
+                    return data;
+                }
             }
        }else{
-        const data = await executeQuery(sql`SELECT * FROM issue WHERE status = ${status} ORDER BY ${orderBy} ASC`)
-        return data;
+        // this sql request doesn't work
+        if(orderBy === 'title'){
+            const data = await executeQuery(sql`SELECT * FROM issue WHERE status = ${status} ORDER BY title`)
+            return data;
+        }
+        if(orderBy === 'status'){
+            const data = await executeQuery(sql`SELECT * FROM issue WHERE status = ${status} ORDER BY status`)
+            return data;
+        }
+        if(orderBy === 'createdAt'){
+            const data = await executeQuery(sql`SELECT * FROM issue WHERE status = ${status} ORDER BY createdAt`)
+            return data;
+        }
        }
     } catch (error) {
         console.log('error is here')
