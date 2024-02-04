@@ -29,9 +29,13 @@ const IssuesPage = async ({
     ? searchParams.status
     : undefined;
 
-  
+  const orderBy =  columns
+    .map(column => column.value)
+    .includes(searchParams.orderBy) 
+    ? searchParams.orderBy 
+    : undefined;
    
-  const issues = await fetchIssues(status, searchParams.orderBy);
+  const issues = await fetchIssues(status, orderBy);
 
   return (
     <div>
