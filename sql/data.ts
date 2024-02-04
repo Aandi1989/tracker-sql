@@ -3,7 +3,7 @@
 import sql from 'sql-template-strings';
 import { executeQuery } from '../sql/db';
 import { unstable_noStore as noStore } from 'next/cache';
-import { Status } from './definitions';
+import { Issue, Status } from './definitions';
 
 export async function createIssue(title: string, description: string){
     noStore();
@@ -27,17 +27,38 @@ export async function createIssue(title: string, description: string){
       }
 }
 
-export async function fetchIssues(status?: Status) {
-    // Add noStore() here prevent the response from being cached.
-    // This is equivalent to in fetch(..., {cache: 'no-store'}).
-    noStore();
-    try {
+/*try {
         const query = status
         ? sql`SELECT * FROM issue WHERE status = ${status}`
         : sql`SELECT * FROM issue`;
 
     const data = await executeQuery(query);
     return data;
+*/ 
+
+export async function fetchIssues(status?: Status, orderBy?: keyof Issue) {
+    // Add noStore() here prevent the response from being cached.
+    // This is equivalent to in fetch(..., {cache: 'no-store'}).
+    noStore();
+    try {
+       if(!status && !orderBy){
+        const data = await executeQuery(sql`SELECT * FROM issue`)
+        return data;
+       }
+       else if(status || orderBy){
+            if(status){
+                const data = await executeQuery(sql`SELECT * FROM issue WHERE status = ${status}`)
+                return data;
+            }else{
+                console.log(orderBy)
+                const data = await executeQuery(sql`SELECT * FROM issue ORDER BY ${orderBy}`)
+                console.log(data)
+                return data;
+            }
+       }else{
+        const data = await executeQuery(sql`SELECT * FROM issue WHERE status = ${status} ORDER BY ${orderBy} ASC`)
+        return data;
+       }
     } catch (error) {
         console.log('error is here')
         console.error('Database Error:', error);

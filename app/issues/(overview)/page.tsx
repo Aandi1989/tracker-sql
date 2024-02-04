@@ -29,7 +29,7 @@ const IssuesPage = async ({
     ? searchParams.status
     : undefined;
    
-  const issues = await fetchIssues(status);
+  const issues = await fetchIssues(status, searchParams.orderBy);
 
   return (
     <div>
