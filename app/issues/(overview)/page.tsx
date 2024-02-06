@@ -6,12 +6,17 @@ import IssueActions from "../_components/IssueActions";
 import { Issue, Status } from "@/sql/definitions";
 import { Underdog } from "next/font/google";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
+import Pagination from "@/app/components/Pagination";
 
 
 const IssuesPage = async ({ 
     searchParams 
   }: { 
-    searchParams: { status: Status, orderBy: keyof Issue };
+    searchParams: { 
+      status: Status, 
+      orderBy: keyof Issue, 
+      page: string
+    };
   }) => {
 
     const columns: {
@@ -34,8 +39,13 @@ const IssuesPage = async ({
     .includes(searchParams.orderBy) 
     ? searchParams.orderBy 
     : undefined;
+
+  const page = parseInt(searchParams.page) || 1;
+  const pageSize = 10;
+  const offset = (page - 1) * pageSize;
    
-  const issues = await fetchIssues(status, orderBy);
+  const issues = await fetchIssues(status, orderBy, pageSize, offset);
+  const totalIssueCount = await fetchIssues(status);
 
   return (
     <div>
@@ -75,6 +85,12 @@ const IssuesPage = async ({
           ))}
         </TableBody>
       </Table.Root>
+      <Pagination 
+        pageSize={pageSize}
+        currentPage={page}
+        //@ts-ignore
+        itemCount={totalIssueCount.length}
+      />
     </div>
   );
 };

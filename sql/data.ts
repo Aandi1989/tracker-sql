@@ -26,12 +26,13 @@ export async function createIssue(title: string, description: string){
 }
 
 
-export async function fetchIssues(status?: Status, orderBy?: keyof Issue, limit: number = 10) {
+export async function fetchIssues(status?: Status, orderBy?: keyof Issue, limit?: number, offset?: number) {
     try {
         const query = `SELECT * FROM issue` +
             (status ? ` WHERE status = '${status}'` : '') +
             (orderBy ? ` ORDER BY ${orderBy}` : '') +
-            (limit ? ` LIMIT ${limit}` : '');
+            (limit ? ` LIMIT ${limit}` : '') +
+            (offset ? ` OFFSET ${offset}` : '' );
 
         const data = await executeQuery(query);
         return data;
