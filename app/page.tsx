@@ -8,7 +8,6 @@ export default function Home({
   return (
     <div>
       <div>Hello World!</div>
-      <Pagination itemCount={100} pageSize={10} currentPage={parseInt(searchParams.page)} />
     </div>
   );
 }
