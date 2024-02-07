@@ -21,7 +21,7 @@ const IssuesPage = async ({ searchParams }: { searchParams: IssueQuery }) => {
   const pageSize = 10;
   const offset = (page - 1) * pageSize;
    
-  const issues = await fetchIssues(status, orderBy, pageSize, offset);
+  const issues = await fetchIssues(status, orderBy, undefined, pageSize, offset);
   const totalIssueCount = await fetchIssues(status);
 
   return (

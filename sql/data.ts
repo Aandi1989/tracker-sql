@@ -26,15 +26,26 @@ export async function createIssue(title: string, description: string){
 }
 
 
-export async function fetchIssues(status?: Status, orderBy?: keyof Issue, limit?: number, offset?: number) {
+export async function fetchIssues(
+    status?: Status, 
+    orderBy?: keyof Issue, 
+    direction?: string ,
+    limit?: number, 
+    offset?: number, 
+    assigned: boolean = false) {
     try {
-        const query = `SELECT * FROM issue` +
+        const query = `SELECT issue.*` + 
+            (assigned ? ` ,user.image` : '') +
+            (` FROM issue` ) +
+            (assigned ? ` LEFT JOIN user ON issue.assigninedToUserId = user.id` : '') +
             (status ? ` WHERE status = '${status}'` : '') +
             (orderBy ? ` ORDER BY ${orderBy}` : '') +
+            (direction ? ` ${direction}` : '') +
             (limit ? ` LIMIT ${limit}` : '') +
             (offset ? ` OFFSET ${offset}` : '' );
-
+        // console.log(query)
         const data = await executeQuery(query);
+        // console.log(data)
         return data;
     } catch (error) {
         console.error('Database Error:', error);
